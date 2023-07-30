@@ -1,69 +1,42 @@
-import random
+import pygame
+import numpy as np
 
 
-class TicTacToe:
-    player1_vic = 0
-    player2_vic = 0
-    board = [['-' for _ in range(3)] for _ in range(3)]
+pygame.init()
 
-    def main(self):
-        player_1 = input("Type name of the first player: ")
-        player_2 = input("Type name of the second player: ")
-        self.show_board()
-        self.play()
+# Colors
+BG = (230, 230, 230)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
 
-    def play(self):
-        current_player = random.randint(1, 2)
-        if current_player == 1:
-            print("Player 1 starts symbol -> X")
-        else:
-            print("Player 2 starts symbol -> O")
+# Window and board
+WIDTH = 400
+HEIGHT = 400
+TAMANO_CASILLA = WIDTH // 3
+BOARD_ROWS = 3
+BOARD_COLUMNS = 3
 
-        while True:
-            row = int(input("Type row to mark: "))
-            col = int(input("Type column to mark: "))
-            self.make_move(row, col, current_player)
+window = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Tic Tac Toe")
 
-            if self.check_winner(current_player):
-                if current_player == 1:
-                    print("Player 1 wins!")
-                    self.player1_vic += 1
-                else:
-                    print("Player 2 wins!")
-                    self.player2_vic += 1
-                break
-
-            current_player = 3 - current_player
-
-    def show_board(self):
-        print("   0   1   2")
-        for row, content in enumerate(self.board):
-            print(f"{row}  {' | '.join(content)}")
-            if row < 2:
-                print("  -----------")
-
-    def check_winner(self, player):
-        solutions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 1, 2], [1, 4, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
-        symbol = 'X' if player == 1 else 'O'
-
-        return False
-
-    def make_move(self, row, col, player):
-        if (self.board[row][col] == "-"):
-            if (player == 1):
-                self.board[row][col] = 'X'
-            else:
-                self.board[row][col] = '0'
-
-        else:
-            print("Esa posicion ya esta marcada!")
-        self.show_board()
-
-    def show_stats(self):
-        print("Victories of player 1: " + str(self.player1_vic))
-        print("Victories of player 2: " + str(self.player2_vic))
+board = np.zeros((BOARD_ROWS, BOARD_COLUMNS))
 
 
-if __name__ == "__main__":
-    game = TicTacToe()
-    game.main()
+def dibujar_tablero():
+    for fila in range(3):
+        for column in range(3):
+            x = column * TAMANO_CASILLA
+            y = fila * TAMANO_CASILLA
+            pygame.draw.rect(window, WHITE, (x, y, TAMANO_CASILLA, TAMANO_CASILLA), 2)
+
+
+while True:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+
+    window.fill(BG)
+    dibujar_tablero()
+    pygame.display.update()
