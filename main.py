@@ -1,6 +1,7 @@
+import random
+
 import pygame
 import numpy as np
-
 
 pygame.init()
 
@@ -11,8 +12,8 @@ BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 
 # Window and board
-WIDTH = 400
-HEIGHT = 400
+WIDTH = 300
+HEIGHT = 300
 TAMANO_CASILLA = WIDTH // 3
 BOARD_ROWS = 3
 BOARD_COLUMNS = 3
@@ -20,7 +21,12 @@ BOARD_COLUMNS = 3
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tic Tac Toe")
 
-board = np.zeros((BOARD_ROWS, BOARD_COLUMNS))
+board = np.zeros((BOARD_ROWS, BOARD_COLUMNS),dtype=int)
+
+players = [1, 2]
+player = random.choice(players)
+clicked = False  # Variable for detecting mouse click
+pos = []  # Stores mouse position
 
 
 def dibujar_tablero():
@@ -30,12 +36,23 @@ def dibujar_tablero():
             y = fila * TAMANO_CASILLA
             pygame.draw.rect(window, WHITE, (x, y, TAMANO_CASILLA, TAMANO_CASILLA), 2)
 
+def draw_markers():
+    pass
 
 while True:
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
+            clicked = True
+        if event.type == pygame.MOUSEBUTTONUP and clicked:
+            clicked = False
+            pos = pygame.mouse.get_pos()
+            x_mouse = pos[0]
+            y_mouse = pos[1]
+            if board[x_mouse // 100][y_mouse // 100] == 0: #Empty cell
+                board[x_mouse // 100][y_mouse // 100] = player
 
     window.fill(BG)
     dibujar_tablero()
