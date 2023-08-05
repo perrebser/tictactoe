@@ -1,6 +1,7 @@
 import random
 import pygame
 import numpy as np
+from pygame import Rect
 
 pygame.init()
 
@@ -29,6 +30,7 @@ pos = []  # Stores mouse position
 game_over = False
 font = pygame.font.SysFont(None, 40)
 winner = None
+play_again_container = Rect(WIDTH // 2 - 100, HEIGHT // 2 + 75, 200, 50)
 
 
 def dibujar_tablero():
@@ -56,9 +58,14 @@ def show_winner():
     global winner
     winner_text = "Player " + str(winner) + " wins!"
     win_img = font.render(winner_text, True, BLUE)
-    pygame.draw.rect(window, WHITE, (WIDTH // 2 - 100, HEIGHT // 2, 200, 50))
+    play_again = "Play again?"
+
+    play_again_img = font.render(play_again, True, RED)
+    pygame.draw.rect(window, BLUE, play_again_container)
     pygame.draw.rect(window, RED, (WIDTH // 2 - 100, HEIGHT // 2, 200, 50))
+
     window.blit(win_img, (WIDTH // 2 - 100 + 10, HEIGHT // 2 + 10))
+    window.blit(play_again_img, (WIDTH // 2 - 100, HEIGHT // 2 + 75))
 
 
 def check_winner():
@@ -76,6 +83,18 @@ def check_winner():
             (board[0][2] == player and board[1][1] == player and board[2][0] == player):
         winner = player
         game_over = True
+
+
+def reset_board():
+    global board
+    global player
+    global clicked
+    global winner
+    global game_over
+    game_over = False
+    winner = None
+    board = np.zeros((BOARD_ROWS, BOARD_COLUMNS), dtype=int)
+    player = random.choice(players)
 
 
 run = True
@@ -101,4 +120,12 @@ while run:
     draw_markers()
     if game_over:
         show_winner()
+        if event.type == pygame.MOUSEBUTTONDOWN and not clicked:
+            clicked = True
+        if event.type == pygame.MOUSEBUTTONUP and clicked:
+            clicked = False
+            pos = pygame.mouse.get_pos()
+            if play_again_container.collidepoint(pos):
+                reset_board()
+
     pygame.display.update()
