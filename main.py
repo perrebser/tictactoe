@@ -8,9 +8,10 @@ pygame.init()
 # Colors
 BG = (230, 230, 230)
 WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
+BLUE = (0, 0, 210)
 RED = (255, 0, 0)
-
+RECT_BG = (0, 199, 210)
+TEXT_COLOR = (17, 17, 2)
 # Window and board
 WIDTH = 300
 HEIGHT = 300
@@ -57,12 +58,12 @@ def draw_markers():
 def show_winner():
     global winner
     winner_text = "Player " + str(winner) + " wins!"
-    win_img = font.render(winner_text, True, BLUE)
+    win_img = font.render(winner_text, True, TEXT_COLOR)
     play_again = "Play again?"
 
-    play_again_img = font.render(play_again, True, RED)
-    pygame.draw.rect(window, BLUE, play_again_container)
-    pygame.draw.rect(window, RED, (WIDTH // 2 - 100, HEIGHT // 2, 200, 50))
+    play_again_img = font.render(play_again, True, TEXT_COLOR)
+    pygame.draw.rect(window, RECT_BG, play_again_container)
+    pygame.draw.rect(window, RECT_BG, (WIDTH // 2 - 100, HEIGHT // 2, 200, 50))
 
     window.blit(win_img, (WIDTH // 2 - 100 + 10, HEIGHT // 2 + 10))
     window.blit(play_again_img, (WIDTH // 2 - 100, HEIGHT // 2 + 75))
